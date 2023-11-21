@@ -100,8 +100,63 @@ app.listen(port, () => {
 ```javascript
 
 DB_USER=ecommerce-server
-DB_PASSWORD=Gm0mdZHU8KC5EfHX
+DB_PASS=Gm0mdZHU8KC5EfHX
+
 
 ```
 
 
+16. In the index.js file under imports write require(‘dotenv’).config()  then write console.log(process.env.DB_PASS) and go to cmd and check whether the password is showing . If password is showing then go to index.js and value of uri should be change to template string. Then <username> should be replaced with ${process.env.DB_USER} and <password> should be replaced with ${process.env.DB_PASS}. Then go to cmd and if you see ‘pinged your deployment. You successfully connected to MongoDB!’ then you successfully connected to mongodb. check the following example
+
+```javascript
+
+const express = require('express');
+const cors = require('cors')
+const { MongoClient, ServerApiVersion } = require('mongodb');
+require('dotenv').config()
+
+const app = express()
+const port = process.env.PORT || 5000;
+
+
+app.use(cors());
+app.use(express.json())
+
+
+
+const uri =`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ktgpsav.mongodb.net/?retryWrites=true&w=majority`;
+
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    await client.close();
+  }
+}
+run().catch(console.dir);
+
+
+
+
+app.get('/', (req, res) => {
+  res.send('Ecmmerce server phase 1 is running')
+})
+
+app.listen(port, () => {
+  console.log(`Server is running at PORT: ${port}`)
+})
+
+```
+
+
+17. In the VSCode create a file named .gitignore and within write: node_modules press enter  and write .env
