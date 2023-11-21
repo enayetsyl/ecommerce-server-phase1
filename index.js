@@ -29,7 +29,14 @@ async function run() {
 
     const productCollection = client.db("ecommerce-server-phase1").collection("products")
 
+// GET ROUTE
 
+// FOR ALL PRODUCTS 
+
+    app.get('/api/v1/allproducts', async(req, res) => {
+      const result = await productCollection.find().toArray()
+      res.send(result)
+    })
 
 
 //  POST ROUTE
