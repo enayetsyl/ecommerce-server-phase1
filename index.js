@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
 const app = express()
@@ -29,7 +29,7 @@ async function run() {
 
     const productCollection = client.db("ecommerce-server-phase1").collection("products")
 
-// GET ROUTE
+// GET ROUTE------------
 
 // FOR ALL PRODUCTS 
 
@@ -38,8 +38,16 @@ async function run() {
       res.send(result)
     })
 
+// EDIT PRODUCT ROUTE 
 
-//  POST ROUTE
+    app.get('/api/v1/allproducts/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await productCollection.findOne(query)
+      res.send(result)
+    })
+
+//  POST ROUTE-----------
 
 // FOR ADD PRODUCT POST ROUTE
     app.post('/api/v1/addproduct', async(req, res) => {

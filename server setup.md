@@ -49,6 +49,7 @@ app.listen(port, () => {
 ```javascript
 const express = require('express');
 const cors = require('cors')
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 const port = process.env.PORT || 5000;
 
@@ -58,7 +59,6 @@ app.use(express.json())
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://<username>:<password>@cluster0.ktgpsav.mongodb.net/?retryWrites=true&w=majority";
 
 const client = new MongoClient(uri, {
@@ -96,7 +96,7 @@ app.listen(port, () => {
 14. You need to hide username and password in the index.js file so you have keep it in the environment variable. So create a file name .env and write DB_USER= & DB_PASS=
 
 15. Then go to mongodb website and click Database Access in the Password Authentication field write the user name and autogenerate a password  then copy username to the .env file and under DB_USER value and copy password to the DB_PASS value and in the website under Built-in Role give the permission to the user and click addUser button. Look following example
-<span style="color:blue">This is blue text</span>
+
 ```javascript
 
 DB_USER=ecommerce-server
@@ -112,7 +112,7 @@ DB_PASS=Gm0mdZHU8KC5EfHX
 
 const express = require('express');
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
 const app = express()
@@ -144,8 +144,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 
 app.get('/', (req, res) => {
