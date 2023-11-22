@@ -29,6 +29,7 @@ async function run() {
 
     const productCollection = client.db("ecommerce-server-phase1").collection("products")
     const orderCollection = client.db("ecommerce-server-phase1").collection("orders")
+    const blogCollection = client.db("ecommerce-server-phase1").collection("blogs")
 
 // GET ROUTE------------
 
@@ -65,6 +66,22 @@ async function run() {
       res.send(result)
     })
 
+// ALL BLOGS GET ROUTE
+
+    app.get('/api/v1/allblogs', async(req, res) => {
+      const result = await blogCollection.find().toArray();
+      res.send(result)
+    })
+
+//  EDIT BLOG GET ROUTE
+
+    app.get('/api/v1/allblogs/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await blogCollection.findOne(query)
+      res.send(result)
+    })
+
 //  POST ROUTE-----------
 
 // FOR ADD PRODUCT POST ROUTE
@@ -81,6 +98,16 @@ async function run() {
       res.send(result)
     })
 
+// FOR ADD BLOG POST ROUTE
+    app.post('/api/v1/addblog', async(req,res) => {
+      const blog = req.body;
+      const result = await blogCollection.insertOne(blog)
+      res.send(result)
+    })
+
+
+
+
 // PATCH ROUTE--------------
   
 // EDIT ORDER PATCH ROUTE
@@ -96,7 +123,6 @@ async function run() {
       const result = await orderCollection.updateOne(query, updateDoc)
       res.send(result)
     })
-
 
 
 // EDIT PRODUCT PATCH ROUTE
@@ -122,6 +148,22 @@ async function run() {
       res.send(result)
     })
 
+// EDIT BLOG PATCH ROUTE
+
+    app.patch('/api/v1/allblogs/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const updatedBlog = req.body;
+      const updateDoc = {
+        $set:{
+          blogTitle: updatedBlog.blogTitle,
+          blog:updatedBlog.blog,
+        featured_image:updatedBlog.featured_image,
+        }
+      }
+      const result = await blogCollection.updateOne(query, updateDoc)
+      res.send(result)
+    })
 
 // DELETE ROUTE ------------------------
 
@@ -133,7 +175,14 @@ async function run() {
       res.send(result)
     })
 
+// FOR DELETE BLOG ROUTE
 
+    app.delete('/api/v1/allblogs/:id', async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await blogCollection.deleteOne(query)
+      res.send(result)
+    })
 
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
