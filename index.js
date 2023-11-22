@@ -48,6 +48,23 @@ async function run() {
       res.send(result)
     })
 
+// ALL ORDER GET ROUTE
+
+    app.get('/api/v1/allorders', async(req, res) => {
+      const result = await orderCollection.find().toArray()
+      res.send(result)
+    })
+
+
+// EDIT ORDER GET ROUTE 
+
+    app.get('/api/v1/allorders/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await orderCollection.findOne(query)
+      res.send(result)
+    })
+
 //  POST ROUTE-----------
 
 // FOR ADD PRODUCT POST ROUTE
