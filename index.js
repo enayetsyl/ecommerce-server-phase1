@@ -28,6 +28,7 @@ async function run() {
     await client.db("admin").command({ ping: 1 });
 
     const productCollection = client.db("ecommerce-server-phase1").collection("products")
+    const orderCollection = client.db("ecommerce-server-phase1").collection("orders")
 
 // GET ROUTE------------
 
@@ -38,7 +39,7 @@ async function run() {
       res.send(result)
     })
 
-// EDIT PRODUCT ROUTE 
+// EDIT PRODUCT GET ROUTE 
 
     app.get('/api/v1/allproducts/:id', async(req, res) => {
       const id = req.params.id;
@@ -53,6 +54,38 @@ async function run() {
     app.post('/api/v1/addproduct', async(req, res) => {
       const product = req.body;
       const result = await productCollection.insertOne(product)
+      res.send(result)
+    })
+
+//  FOR ADD ORDER POST ROUTE
+    app.post('/api/v1/order', async(req, res) => {
+      const order = req.body;
+      const result = await orderCollection.insertOne(order)
+      res.send(result)
+    })
+
+// PATCH ROUTE--------------
+
+// EDIT PRODUCT PATCH ROUTE
+
+    app.patch('/api/v1/allproducts/:id', async(req, res) => {
+      const id = req.params.id;
+      const updatedProductData = req.body;
+      const query = {_id: new ObjectId(id)}
+      const updateDoc = {
+        $set: {
+          category: updatedProductData.category,
+          color: updatedProductData.color,
+          desc: updatedProductData.desc,
+          featured_image: updatedProductData.featured_image,
+          gallery_image: updatedProductData.gallery_image,
+          size: updatedProductData.size,
+          title: updatedProductData.title,
+          rprice: updatedProductData.rprice,
+          sprice: updatedProductData.sprice,
+        }
+      }
+      const result = await productCollection.updateOne(query, updateDoc)
       res.send(result)
     })
 
