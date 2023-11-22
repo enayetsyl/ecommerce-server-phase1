@@ -82,6 +82,22 @@ async function run() {
     })
 
 // PATCH ROUTE--------------
+  
+// EDIT ORDER PATCH ROUTE
+    app.patch('/api/v1/order/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const updatedOrderData = req.body;
+      const updateDoc = {
+        $set: {
+          status:updatedOrderData.status,
+        }
+      }
+      const result = await orderCollection.updateOne(query, updateDoc)
+      res.send(result)
+    })
+
+
 
 // EDIT PRODUCT PATCH ROUTE
 
